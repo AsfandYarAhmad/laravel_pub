@@ -1,6 +1,11 @@
 @extends('app')
  
 @section('content')
+<style>
+    #name-error{
+        color: red;
+    }
+</style>
 <div class="panel panel-default border rounded">
             <div class="panel-heading bg-light p-3 pt-2 pb-2 border-bottom">
                 New Task
@@ -10,22 +15,18 @@
         <!-- Display Validation Errors -->
        
         <!-- New Task Form -->
-        <form action="/task" method="POST" class="form-horizontal">
+        <form action="{{route('tasks.store')}}" method="POST" id="add_task">
            @csrf
- 
             <!-- Task Name -->
-            <div class="form-group mt-3">
-                <label for="task" class="col-sm-3 control-label bold">Task</label>
- 
-                <div class="col-12">
-                    <input type="text" name="name" id="task-name" class="form-control">
+                <div class="">
+                <label for="task" class="form-label">Task</label>
+                    <input type="text" name="name" id="name" class="form-control">
                 </div>
-            </div>
  
             <!-- Add Task Button -->
             <div class="form-group">
                 <div class="col-sm-offset-3 col-12 mt-2">
-                    <button type="submit" class="btn btn-light">
+                    <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to add task?');">
                         <i class="fa fa-plus"></i>  Add Task
                     </button>
                 </div>
@@ -56,12 +57,12 @@
                         @foreach ($tasks as $task)
                             <tr>
                                 <!-- Task Name -->
-                                <td>
+                                <td class="col-6">
                                     <div>{{ $task->name }}</div>
                                 </td>
                                 
-                                <td>
-                                    <form action="/task/{{ $task->id }}" method="POST">
+                                <td class="col-6">
+                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="Post" onclick="return confirm('Are you sure you want to delete task {{ $task->name }}?');">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
@@ -76,5 +77,22 @@
         </div>
     </div>
     @endif
-      <!-- TODO: Current Tasks -->
 @endsection
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.4/additional-methods.min.js" integrity="sha512-XJiEiB5jruAcBaVcXyaXtApKjtNie4aCBZ5nnFDIEFrhGIAvitoqQD6xd9ayp5mLODaCeaXfqQMeVs1ZfhKjRQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.4/jquery.validate.min.js" integrity="sha512-FOhq9HThdn7ltbK8abmGn60A/EMtEzIzv1rvuh+DqzJtSGq8BRdEN0U+j0iKEIffiw/yEtVuladk6rsG4X6Uqg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script>
+  $("#add_task").validate({
+          ignore:"",
+          rules:{
+            name:{
+                  required:!0,
+                  maxlength:30,
+                  minlength:10
+             },
+          },
+          submitHandler:function(n){n.submit()}
+
+  });
+</script>
+
