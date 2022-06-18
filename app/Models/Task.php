@@ -11,8 +11,10 @@ class Task extends Model
     public static function storeTask($array){
         $task = new Task;
         $task->name = $array['name'];
+        $task->date = $array['date'];
+        $task->time = $array['time'];
         $task->save();
-        return back();
+        return redirect()->back()->with('taskCreated', 'Task created sucessfully!');
     }
 
 }

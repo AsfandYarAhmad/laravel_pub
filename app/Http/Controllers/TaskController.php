@@ -38,6 +38,11 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => ['required', 'max:30', 'min:10'],
+            'date' => ['required'],
+            'time' => ['required', 'unique:tasks,time']
+        ]);
         Task::storeTask($request->all());
         return back();
     }
@@ -73,7 +78,12 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $task = Task::find($id);
+        $task->name = $request->name;
+        $task->date = $request->date;
+        $task->time = $request->time;
+        $task->save();
+        return back();
     }
 
     /**
@@ -85,6 +95,6 @@ class TaskController extends Controller
     public function destroy($id)
     {
         Task::findOrFail($id)->delete();
-        return back();
+        return redirect()->back()->with('taskDelete', 'Task deleted sucessfully!');
     }
 }
