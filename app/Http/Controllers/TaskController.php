@@ -78,12 +78,17 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'updateName' => ['required', 'max:30', 'min:10'],
+            'updateDate' => ['required'],
+            'updateTime' => ['required']
+        ]);
         $task = Task::find($id);
-        $task->name = $request->name;
-        $task->date = $request->date;
-        $task->time = $request->time;
+        $task->name = $request->updateName;
+        $task->date = $request->updateDate;
+        $task->time = $request->updateTime;
         $task->save();
-        return back();
+        return redirect()->back()->with('taskUpdated', 'Task Updated Sucessfully!');
     }
 
     /**

@@ -63,6 +63,12 @@
     {{ session()->get('taskDelete') }}
 </div>
 @endif
+@include('common.errors')
+@if(session()->has('taskUpdated'))
+<div class="alert alert-success mt-3">
+    {{ session()->get('taskUpdated') }}
+</div>
+@endif
 @if (count($tasks) > 0)
 <div class="panel panel-default border mt-4 rounded">
     <div class="panel-heading bg-light p-3 pt-2 pb-2 border-bottom">
@@ -101,15 +107,24 @@
                                                 @csrf
                                                 <div>
                                                     <label for="task" class="form-label">Task Name</label>
-                                                    <input type="text" name="name" id="name" class="form-control" value="{{ $task->name }}">
+                                                    <input type="text" name="updateName" id="name" class="form-control" value="{{ $task->name }}">
+                                                    @if ($errors->has('updateName'))
+                                                    <span class="text-danger">{{ $errors->first('updateName') }}</span>
+                                                    @endif
                                                 </div>
                                                 <div>
                                                     <label for="task" class="form-label">Task</label>
-                                                    <input type="date" name="date" id="date" class="form-control" value="{{ $task->date }}">
+                                                    <input type="date" name="updateDate" id="date" class="form-control" value="{{ $task->date }}">
+                                                    @if ($errors->has('updateDate'))
+                                                    <span class="text-danger">{{ $errors->first('updateDate') }}</span>
+                                                    @endif
                                                 </div>
                                                 <div>
                                                     <label for="task" class="form-label">Task</label>
-                                                    <input type="time" name="time" id="time" class="form-control" value="{{ $task->time }}">
+                                                    <input type="time" name="updateTime" id="time" class="form-control" value="{{ $task->time }}">
+                                                    @if ($errors->has('updateTime'))
+                                                    <span class="text-danger">{{ $errors->first('updateTime') }}</span>
+                                                    @endif
                                                 </div>
                                         </div>
                                         <div class="modal-footer">
@@ -129,7 +144,8 @@
                             <div>{{ $task->date }}</div>
                         </td>
                         <td class="col-3">
-                            <div>{{ $task->time }}</div>
+                            <div>{{ date('h:i A', strtotime($task->time )); }}</div>
+
                         </td>
                         <td class="col-3">
                             <form action="{{ route('tasks.destroy', $task->id) }}" method="Post" onclick="return confirm('Are you sure you want to delete task {{ $task->name }}?');">
