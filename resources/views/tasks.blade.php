@@ -113,14 +113,14 @@
                                                     @endif
                                                 </div>
                                                 <div>
-                                                    <label for="task" class="form-label">Task</label>
+                                                    <label for="task" class="form-label">Date</label>
                                                     <input type="date" name="updateDate" id="date" class="form-control" value="{{ $task->date }}">
                                                     @if ($errors->has('updateDate'))
                                                     <span class="text-danger">{{ $errors->first('updateDate') }}</span>
                                                     @endif
                                                 </div>
                                                 <div>
-                                                    <label for="task" class="form-label">Task</label>
+                                                    <label for="task" class="form-label">Time</label>
                                                     <input type="time" name="updateTime" id="time" class="form-control" value="{{ $task->time }}">
                                                     @if ($errors->has('updateTime'))
                                                     <span class="text-danger">{{ $errors->first('updateTime') }}</span>
