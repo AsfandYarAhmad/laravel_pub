@@ -53,4 +53,57 @@
         </div>
     </div>
 </div>
+
+@if (count($tasks) > 0)
+<div class="panel panel-default border mt-4 rounded">
+    <div class="panel-heading bg-light p-3 pt-2 pb-2 border-bottom">
+        Current Tasks
+    </div>
+    <div class="container">
+        <div class="panel-body">
+            <table class="table table-striped task-table">
+
+                <!-- Table Headings -->
+                <thead>
+                    <th></th>
+                    <th>Task Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </thead>
+
+                <!-- Table Body -->
+                <tbody>
+                    @foreach ($tasks as $task)
+                    <tr>
+                        <td>
+                            <a href="{{ route('tasks.edit', $task->id) }}"><i class="fas fa-edit" style="color: black"></i></a>
+                        </td>
+                        <!-- Task Name -->
+                        <td class="col-3">
+                            <div>{{ $task->name }}</div>
+                        </td>
+                        <td class="col-3">
+                            <div>{{ $task->date }}</div>
+                        </td>
+                        <td class="col-3">
+                            <div>{{ $task->time }}</div>
+
+                        </td>
+                        <td class="col-3">
+                            <form action="{{ route('tasks.destroy', $task->id) }}" method="Post" onclick="return confirm('Are you sure you want to delete task {{ $task->name }}?');">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+                                <input type="hidden" name="_method" value="DELETE">
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endif
 @endsection

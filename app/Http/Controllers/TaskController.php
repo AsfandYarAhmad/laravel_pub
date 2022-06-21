@@ -72,8 +72,9 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
+        $tasks = Task::orderBy('id', 'asc')->get();
         $task = Task::find($id);
-        return view('editTask')->with('task', $task);
+        return view('editTask')->with(['task' => $task, 'tasks' => $tasks]);
     }
 
     /**
