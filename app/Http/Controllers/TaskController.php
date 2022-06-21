@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
 {
@@ -38,10 +39,15 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        $date = $request->date;
+        $time = $request->time;
         $request->validate([
             'name' => ['required', 'max:30', 'min:10'],
-            'date' => ['required'],
-            'time' => ['required', 'unique:tasks,time']
+            'date' => ['required', Rule::unique('tasks')->where(function ($query) use ($date, $time) {
+                return $query->where('date', $date)
+                    ->where('time', $time);
+            })],
+            'time' => ['required',]
         ]);
         Task::storeTask($request->all());
         return back();
@@ -66,7 +72,8 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        //
+        $task = Task::find($id);
+        return view('editTask')->with('task', $task);
     }
 
     /**
@@ -78,17 +85,23 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $date = $request->date;
+        $time = $request->time;
         $request->validate([
-            'updateName' => ['required', 'max:30', 'min:10'],
-            'updateDate' => ['required'],
-            'updateTime' => ['required']
+            'name' => ['required', 'max:30', 'min:10'],
+            'date' => ['required', Rule::unique('tasks')->ignore($id)->where(function ($query) use ($date, $time) {
+                return $query->where('date', $date)
+                    ->where('time', $time);
+            })],
+            'time' => ['required']
         ]);
         $task = Task::find($id);
-        $task->name = $request->updateName;
-        $task->date = $request->updateDate;
-        $task->time = $request->updateTime;
+        $task->name = $request->name;
+        $task->date = $request->date;
+        $task->time = $request->time;
         $task->save();
-        return redirect()->back()->with('taskUpdated', 'Task Updated Sucessfully!');
+        return redirect('tasks')->with('taskUpdated', 'Task Updated Sucessfully!');
+        // return redirect()->view('tasks')->with('taskUpdated', 'Task Updated Sucessfully!');
     }
 
     /**

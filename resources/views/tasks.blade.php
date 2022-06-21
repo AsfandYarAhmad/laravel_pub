@@ -15,33 +15,36 @@
             <!-- Display Validation Errors -->
 
             <!-- New Task Form -->
-            <form action="{{route('tasks.store')}}" method="POST" id="add_task">
+            <form action="{{route('tasks.store')}}" method="POST" id="add_task" class="g-3 needs-validation" novalidate>
                 @csrf
                 <!-- Task Name -->
                 <div class="row">
                     <div class="col-4">
-                        <label for="task" class="form-label">Task</label>
-                        <input type="text" name="name" id="name" class="form-control">
+                        <label for="name" class="form-label">Task</label>
+                        <input type="text" name="name" id="name" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}" value=" {{ old('name') }}">
                         @if ($errors->has('name'))
                         <span class="text-danger">{{ $errors->first('name') }}</span>
                         @endif
                     </div>
                     <div class="col-4">
-                        <label for="task" class="form-label">Date</label>
-                        <input type="date" name="date" id="date" class="form-control">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" name="date" id="date" class="form-control {{ $errors->first('date') ? 'is-invalid' : '' }}" data-date-format="yyyy/mm/dd" value="{{ old('date') }}">
                         @if ($errors->has('date'))
                         <span class="text-danger">{{ $errors->first('date') }}</span>
                         @endif
                     </div>
                     <div class="col-4">
-                        <label for="task" class="form-label">Time</label>
-                        <input type="time" name="time" id="time" class="form-control">
+                        <label for="" class="form-label">Time</label>
+                        <select class="form-select {{ $errors->first('time') ? 'is-invalid' : '' }}" name="time">
+                            <option value="" selected>Please Select</option>
+                            <option value="AM" {{ old('time') == 'AM' ? 'SELECTED' : '' }}>AM</option>
+                            <option value="PM" {{ old('time') == 'AM' ? 'SELECTED' : '' }}>PM</option>
+                        </select>
                         @if ($errors->has('time'))
                         <span class="text-danger">{{ $errors->first('time') }}</span>
                         @endif
                     </div>
                 </div>
-
                 <!-- Add Task Button -->
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-12 mt-2">
@@ -63,7 +66,6 @@
     {{ session()->get('taskDelete') }}
 </div>
 @endif
-@include('common.errors')
 @if(session()->has('taskUpdated'))
 <div class="alert alert-success mt-3">
     {{ session()->get('taskUpdated') }}
@@ -92,49 +94,7 @@
                     @foreach ($tasks as $task)
                     <tr>
                         <td>
-                            <a href="#edit_{{ $task->id }}" data-bs-toggle="modal"><i class="fas fa-edit" style="color: black"></i></a>
-                            <!-- Modal -->
-                            <div class="modal fade" id="edit_{{ $task->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Update Task no. {{$task->id}}</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="{{ route('tasks.update', $task->id) }}" method="POST">
-                                                @method('PATCH')
-                                                @csrf
-                                                <div>
-                                                    <label for="task" class="form-label">Task Name</label>
-                                                    <input type="text" name="updateName" id="name" class="form-control" value="{{ $task->name }}">
-                                                    @if ($errors->has('updateName'))
-                                                    <span class="text-danger">{{ $errors->first('updateName') }}</span>
-                                                    @endif
-                                                </div>
-                                                <div>
-                                                    <label for="task" class="form-label">Date</label>
-                                                    <input type="date" name="updateDate" id="date" class="form-control" value="{{ $task->date }}">
-                                                    @if ($errors->has('updateDate'))
-                                                    <span class="text-danger">{{ $errors->first('updateDate') }}</span>
-                                                    @endif
-                                                </div>
-                                                <div>
-                                                    <label for="task" class="form-label">Time</label>
-                                                    <input type="time" name="updateTime" id="time" class="form-control" value="{{ $task->time }}">
-                                                    @if ($errors->has('updateTime'))
-                                                    <span class="text-danger">{{ $errors->first('updateTime') }}</span>
-                                                    @endif
-                                                </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                            <a href="{{ route('tasks.edit', $task->id) }}"><i class="fas fa-edit" style="color: black"></i></a>
                         </td>
                         <!-- Task Name -->
                         <td class="col-3">
@@ -144,7 +104,7 @@
                             <div>{{ $task->date }}</div>
                         </td>
                         <td class="col-3">
-                            <div>{{ date('h:i A', strtotime($task->time )); }}</div>
+                            <div>{{ $task->time }}</div>
 
                         </td>
                         <td class="col-3">
