@@ -105,7 +105,7 @@ class TaskController extends Controller
     public function validations(Request $request, $id) {
         $date = $request->date;
         $time = $request->time;
-        $validationRule =  $request->validate([
+        $request->validate([
             'name' => ['required', 'max:30', 'min:10'],
             'date' => ['required', Rule::unique('tasks')->ignore($id)->where(function ($query) use ($date, $time) {
                 return $query->where('date', $date)
@@ -113,6 +113,5 @@ class TaskController extends Controller
             })],
             'time' => ['required']
         ]);
-        return $validationRule;
     }
 }
