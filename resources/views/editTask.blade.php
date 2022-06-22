@@ -1,6 +1,7 @@
 @extends('app')
 
 @section('content')
+@include('common.errors')
 <div class="panel panel-default border rounded">
     <div class="panel-heading bg-light p-3 pt-2 pb-2 border-bottom">
         Edit Task
@@ -16,14 +17,14 @@
                 <!-- Task Name -->
                 <div class="mb-3">
                     <label for="task" class="form-label">Task</label>
-                    <input type="text" name="name" id="task" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}" value="{{ $task->name }}">
+                    <input type="text" name="name" id="task" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}" value=" {{ $errors->first('name') ? old('name') :  $task->name }}">
                     @if ($errors->has('name'))
                     <span class="text-danger">{{ $errors->first('name') }}</span>
                     @endif
                 </div>
                 <div class="mb-3">
                     <label for="date" class="form-label">Date</label>
-                    <input type="date" placeholder="dd-mm-yyyy" name="date" id="date" class="form-control {{ $errors->first('date') ? 'is-invalid' : '' }}" value="{{ $task->date }}">
+                    <input type="date" placeholder="dd-mm-yyyy" name="date" id="date" class="form-control {{ $errors->first('date') ? 'is-invalid' : '' }}" value="{{ $errors->first('date') ? old('date') :  $task->date }}">
                     @if ($errors->has('date'))
                     <span class="text-danger">{{ $errors->first('date') }}</span>
                     @endif
@@ -32,8 +33,8 @@
                     <label for="time" class="form-label">Time</label>
                     <select class="form-select {{ $errors->first('time') ? 'is-invalid' : '' }}" name="time" value="{{ $task->time }}">
                         <option>Please Select</option>
-                        <option name="time" value="AM" {{ $task->time == 'AM' ? "selected":"" }}>AM</option>
-                        <option name="time" value="PM" {{ $task->time == 'PM' ? "selected":"" }}>PM</option>
+                        <option name="time" value="AM" {{ old('time', $task->time) == "AM" ? 'selected' : '' }}>AM</option>
+                        <option name="time" value="PM" {{ old('time', $task->time) == "PM" ? 'selected' : '' }}>PM</option>
                     </select>
                     @if ($errors->has('time'))
                     <span class="text-danger">{{ $errors->first('time') }}</span>
@@ -41,6 +42,7 @@
                 </div>
                 <!-- Edit Task Button -->
                 <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to Edit task?');"><i class="fa fa-plus"></i> Edit Task</button>
+                <a href="{{ url('tasks') }}" class="btn btn-light ">Cancel</a>
             </form>
         </div>
     </div>

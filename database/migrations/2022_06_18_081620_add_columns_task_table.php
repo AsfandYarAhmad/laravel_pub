@@ -28,9 +28,11 @@ return new class extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('date');
+            $table->dropUnique(['date', 'time']);
             $table->dropColumn('time');
-            $table->dropUnique('tasks_date_time_unique');
+            $table->dropColumn('date');
+            
+            
         });
     }
 };

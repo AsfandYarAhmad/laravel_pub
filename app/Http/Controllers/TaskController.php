@@ -14,9 +14,9 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $tasks = Task::showTask($request->all());
+        $tasks = Task::getAll();
         return view('tasks')->with([
             'tasks' => $tasks
         ]);
@@ -62,9 +62,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
-        $tasks = Task::showTask($request->all());
+        $tasks = Task::getAll();
         $task = Task::find($id);
         return view('editTask')->with([
             'task' => $task,

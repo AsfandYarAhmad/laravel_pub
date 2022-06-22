@@ -18,20 +18,11 @@ class Task extends Model
         $task->save();
     }
 
-    public static function showTask() {
+    public static function getAll() {
         $tasks = Task::orderBy('created_at', 'asc')->get();
         return $tasks;
     }
 
-    public static function editTask($id) {
-        $task = Task::find($id);
-        return $task;
-    }
-
-    public static function updateTask($id) {
-        $task = Task::find($id);
-        return $task;
-    }
-
+   
    
 }

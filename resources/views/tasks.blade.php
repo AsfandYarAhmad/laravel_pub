@@ -1,6 +1,7 @@
 @extends('app')
 
 @section('content')
+@include('common.errors')
 @if(session()->has('taskCreated'))
 <div class="alert alert-success">
     {{ session()->get('taskCreated') }}
