@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -13,9 +14,9 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::orderBy('created_at', 'asc')->get();
+        $tasks = Task::showTask($request->all());
         return view('tasks')->with([
             'tasks' => $tasks
         ]);
@@ -39,18 +40,9 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        $date = $request->date;
-        $time = $request->time;
-        $request->validate([
-            'name' => ['required', 'max:30', 'min:10'],
-            'date' => ['required', Rule::unique('tasks')->where(function ($query) use ($date, $time) {
-                return $query->where('date', $date)
-                    ->where('time', $time);
-            })],
-            'time' => ['required',]
-        ]);
+        $this->validations($request, null);
         Task::storeTask($request->all());
-        return back();
+        return redirect()->back()->with('taskCreated', 'Task created sucessfully!');
     }
 
     /**
@@ -70,11 +62,14 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        $tasks = Task::orderBy('id', 'asc')->get();
+        $tasks = Task::showTask($request->all());
         $task = Task::find($id);
-        return view('editTask')->with(['task' => $task, 'tasks' => $tasks]);
+        return view('editTask')->with([
+            'task' => $task,
+            'tasks' => $tasks
+        ]);
     }
 
     /**
@@ -86,23 +81,13 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $date = $request->date;
-        $time = $request->time;
-        $request->validate([
-            'name' => ['required', 'max:30', 'min:10'],
-            'date' => ['required', Rule::unique('tasks')->ignore($id)->where(function ($query) use ($date, $time) {
-                return $query->where('date', $date)
-                    ->where('time', $time);
-            })],
-            'time' => ['required']
-        ]);
-        $task = Task::find($id);
+        $this->validations($request, $id);
+        $task = Task::findOrFail($id);
         $task->name = $request->name;
         $task->date = $request->date;
         $task->time = $request->time;
         $task->save();
         return redirect('tasks')->with('taskUpdated', 'Task Updated Sucessfully!');
-        // return redirect()->view('tasks')->with('taskUpdated', 'Task Updated Sucessfully!');
     }
 
     /**
@@ -115,5 +100,19 @@ class TaskController extends Controller
     {
         Task::findOrFail($id)->delete();
         return redirect()->back()->with('taskDelete', 'Task deleted sucessfully!');
+    }
+
+    public function validations(Request $request, $id) {
+        $date = $request->date;
+        $time = $request->time;
+        $validationRule =  $request->validate([
+            'name' => ['required', 'max:30', 'min:10'],
+            'date' => ['required', Rule::unique('tasks')->ignore($id)->where(function ($query) use ($date, $time) {
+                return $query->where('date', $date)
+                    ->where('time', $time);
+            })],
+            'time' => ['required']
+        ]);
+        return $validationRule;
     }
 }

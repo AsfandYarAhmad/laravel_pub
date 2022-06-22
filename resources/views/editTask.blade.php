@@ -14,41 +14,33 @@
                 @method('PATCH')
                 @csrf
                 <!-- Task Name -->
-                <div class="row">
-                    <div class="col-4">
-                        <label for="task" class="form-label">Task</label>
-                        <input type="text" name="name" id="task" class="form-control {{ $errors->first('date') ? 'is-invalid' : '' }}" value="{{ $task->name }}">
-                        @if ($errors->has('name'))
-                        <span class="text-danger">{{ $errors->first('name') }}</span>
-                        @endif
-                    </div>
-                    <div class="col-4">
-                        <label for="date" class="form-label">Date</label>
-                        <input type="date" placeholder="dd-mm-yyyy" name="date" id="date" class="form-control {{ $errors->first('date') ? 'is-invalid' : '' }}" value="{{ $task->date }}">
-                        @if ($errors->has('date'))
-                        <span class="text-danger">{{ $errors->first('date') }}</span>
-                        @endif
-                    </div>
-                    <div class="col-4">
-                        <label for="time" class="form-label">Time</label>
-                        <select class="form-select {{ $errors->first('date') ? 'is-invalid' : '' }}" name="time" value="{{ $task->time }}">
-                            <option>Please Select</option>
-                            <option name="time" value="AM" {{ $task->time == 'AM' ? "selected":"" }}>AM</option>
-                            <option name="time" value="PM" {{ $task->time == 'PM' ? "selected":"" }}>PM</option>
-                        </select>
-                        @if ($errors->has('time'))
-                        <span class="text-danger">{{ $errors->first('time') }}</span>
-                        @endif
-                    </div>
+                <div class="mb-3">
+                    <label for="task" class="form-label">Task</label>
+                    <input type="text" name="name" id="task" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}" value="{{ $task->name }}">
+                    @if ($errors->has('name'))
+                    <span class="text-danger">{{ $errors->first('name') }}</span>
+                    @endif
                 </div>
-                <!-- Add Task Button -->
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-12 mt-2">
-                        <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to Edit task?');">
-                            <i class="fa fa-plus"></i> Edit Task
-                        </button>
-                    </div>
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" placeholder="dd-mm-yyyy" name="date" id="date" class="form-control {{ $errors->first('date') ? 'is-invalid' : '' }}" value="{{ $task->date }}">
+                    @if ($errors->has('date'))
+                    <span class="text-danger">{{ $errors->first('date') }}</span>
+                    @endif
                 </div>
+                <div class="mb-3">
+                    <label for="time" class="form-label">Time</label>
+                    <select class="form-select {{ $errors->first('time') ? 'is-invalid' : '' }}" name="time" value="{{ $task->time }}">
+                        <option>Please Select</option>
+                        <option name="time" value="AM" {{ $task->time == 'AM' ? "selected":"" }}>AM</option>
+                        <option name="time" value="PM" {{ $task->time == 'PM' ? "selected":"" }}>PM</option>
+                    </select>
+                    @if ($errors->has('time'))
+                    <span class="text-danger">{{ $errors->first('time') }}</span>
+                    @endif
+                </div>
+                <!-- Edit Task Button -->
+                <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to Edit task?');"><i class="fa fa-plus"></i> Edit Task</button>
             </form>
         </div>
     </div>

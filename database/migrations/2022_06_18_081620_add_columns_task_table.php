@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->string('date', 8);
+            $table->string('date', 10);
             $table->string('time', 2);
             $table->unique(['date', 'time']);
         });

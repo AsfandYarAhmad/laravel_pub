@@ -18,41 +18,35 @@
             <form action="{{route('tasks.store')}}" method="POST" id="add_task" class="g-3 needs-validation" novalidate>
                 @csrf
                 <!-- Task Name -->
-                <div class="row">
-                    <div class="col-4">
-                        <label for="name" class="form-label">Task</label>
-                        <input type="text" name="name" id="name" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}" value=" {{ old('name') }}">
-                        @if ($errors->has('name'))
-                        <span class="text-danger">{{ $errors->first('name') }}</span>
-                        @endif
-                    </div>
-                    <div class="col-4">
-                        <label for="date" class="form-label">Date</label>
-                        <input type="date" name="date" id="date" class="form-control {{ $errors->first('date') ? 'is-invalid' : '' }}" data-date-format="yyyy/mm/dd" value="{{ old('date') }}">
-                        @if ($errors->has('date'))
-                        <span class="text-danger">{{ $errors->first('date') }}</span>
-                        @endif
-                    </div>
-                    <div class="col-4">
-                        <label for="" class="form-label">Time</label>
-                        <select class="form-select {{ $errors->first('time') ? 'is-invalid' : '' }}" name="time">
-                            <option value="" selected>Please Select</option>
-                            <option value="AM" {{ old('time') == 'AM' ? 'SELECTED' : '' }}>AM</option>
-                            <option value="PM" {{ old('time') == 'AM' ? 'SELECTED' : '' }}>PM</option>
-                        </select>
-                        @if ($errors->has('time'))
-                        <span class="text-danger">{{ $errors->first('time') }}</span>
-                        @endif
-                    </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Task</label>
+                    <input type="text" name="name" id="name" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}" value=" {{ old('name') }}">
+                    @if ($errors->has('name'))
+                    <span class="text-danger">{{ $errors->first('name') }}</span>
+                    @endif
+                </div>
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date</label>
+                    <input type="date" name="date" id="date" class="form-control {{ $errors->first('date') ? 'is-invalid' : '' }}" data-date-format="yyyy/mm/dd" value="{{ old('date') }}">
+                    @if ($errors->has('date'))
+                    <span class="text-danger">{{ $errors->first('date') }}</span>
+                    @endif
+                </div>
+                <div class="mb-3">
+                    <label for="time" class="form-label">Time</label>
+                    <select class="form-select {{ $errors->first('time') ? 'is-invalid' : '' }}" name="time">
+                        <option value="" selected>Please Select</option>
+                        <option value="AM" {{ old('time') == 'AM' ? 'SELECTED' : '' }}>AM</option>
+                        <option value="PM" {{ old('time') == 'AM' ? 'SELECTED' : '' }}>PM</option>
+                    </select>
+                    @if ($errors->has('time'))
+                    <span class="text-danger">{{ $errors->first('time') }}</span>
+                    @endif
                 </div>
                 <!-- Add Task Button -->
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-12 mt-2">
-                        <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to add task?');">
-                            <i class="fa fa-plus"></i> Add Task
-                        </button>
-                    </div>
-                </div>
+                <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to add task?');">
+                    <i class="fa fa-plus"></i> Add Task
+                </button>
             </form>
         </div>
     </div>

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class Task extends Model
 {
@@ -14,7 +16,22 @@ class Task extends Model
         $task->date = $array['date'];
         $task->time = $array['time'];
         $task->save();
-        return redirect()->back()->with('taskCreated', 'Task created sucessfully!');
     }
 
+    public static function showTask() {
+        $tasks = Task::orderBy('created_at', 'asc')->get();
+        return $tasks;
+    }
+
+    public static function editTask($id) {
+        $task = Task::find($id);
+        return $task;
+    }
+
+    public static function updateTask($id) {
+        $task = Task::find($id);
+        return $task;
+    }
+
+   
 }
