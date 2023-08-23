@@ -5,10 +5,10 @@ services:
     build: "./"
     tty: true
     container_name: dev_laravel
-    ports: 
+    ports:
       - 8089:80
     restart: always
-    depends_on:
+    external_links:
       - dev_mysql
     environment:
       DB_HOST: dev_mysql
